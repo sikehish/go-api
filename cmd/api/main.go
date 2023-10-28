@@ -11,7 +11,7 @@ import (
 
 
 func main(){
-	log.SetReportCaller(true)
+	log.SetReportCaller(true) //SetReportCaller(true) is used to enable reporting of the file and line number where a log message is generated.
 	var r *chi.Mux=chi.NewRouter()
 	handlers.Handler(r)
 
