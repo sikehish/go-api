@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/sikehish/go-api/api"
+	"github.com/sikehish/go-api/internal/tools"
+	log "github.com/sirupsen/logrus"
 )
 
 var unAuthorizedError= errors.New("Invalid username or token.")
@@ -23,15 +25,16 @@ func Authorization(next http.Handler) http.Handler {
 		}
 
 		var database *tools.DatabaseInterface
+		var err error
 		database, err=tools.NewDatabase()
 
 		if err!=nil {
-			api.InternalErrorHandler(e)
+			api.InternalErrorHandler(w)
 			return
 		}
 
-		var loginDetails *tools.loginDetails
-		loginDetails, err=(*database).GetLoginDetails(username)
+		var loginDetails *tools.LoginDetails
+		loginDetails=(*database).GetUserLoginDetails(username)
 
 		if (loginDetails==nil || (token!=(*loginDetails).AuthToken)){
 			log.Error(unAuthorizedError)
